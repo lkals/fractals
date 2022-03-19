@@ -25,6 +25,7 @@ import java.util.List;
 
 import static javafx.scene.paint.Color.WHITE;
 
+
 /**
  * classe HomeController permettant d'implémenter l'interface graphique
  */
@@ -40,13 +41,16 @@ public class HomeController {
     @FXML private StackPane fractalPane;
     @FXML private Pane anchorBelow;
     @FXML private Label messageLabel;
-    @FXML private Button computeButton;
+    @FXML private Button computeButtonThreads;
+    @FXML private Button computeButtonParallel;
 
     @FXML private TextField longueurTextField;
     @FXML private TextField hauteurTextField;
+    @FXML private TextField sizeTextField;
     @FXML private TextField iterMaxTextField;
     @FXML private CheckBox defaultCheckBox;
 
+    //TODO: exception: launch sans valeur sélectionnée
     @FXML private ChoiceBox<String> constanteBox;
     @FXML private TextField realTextField;
     @FXML private TextField imTextField;
@@ -97,22 +101,14 @@ public class HomeController {
         pw = gc.getPixelWriter();
 
         /*Lorsque le textfield est vide, le bouton compute est désactivé*/
-        computeButton.disableProperty().bind(
-                Bindings.createBooleanBinding( () ->
-                        longueurTextField.getText().trim().isEmpty(), longueurTextField.textProperty()
-                )
-                .or( Bindings.createBooleanBinding( () ->
-                hauteurTextField.getText().trim().isEmpty(), hauteurTextField.textProperty()
-                ))
-                .or( Bindings.createBooleanBinding( () ->
+        computeButtonThreads.disableProperty().bind(
+                ( Bindings.createBooleanBinding( () ->
                 iterMaxTextField.getText().trim().isEmpty(), iterMaxTextField.textProperty()
                 ))
+                        .or( Bindings.createBooleanBinding( () ->
+                                sizeTextField.getText().trim().isEmpty(), sizeTextField.textProperty()
+                        ))
         );
-
-       /* downloadButton.disableProperty().bind(
-        		Bindings.createBooleanBinding(() -> 
-        		downloadTextField.getText().trim().isEmpty(), downloadTextField.textProperty())
-        );*/
         
         for (Complexe c : constantes) {
             constanteBox.getItems().add(c.toString());
@@ -148,7 +144,7 @@ public class HomeController {
 	            afficheWarning(e1.getMessage());
 	            return;
 	        }
-        }initFractal();
+        }initFractalParallel();
     }
 
     private void afficheWarning(String w) {
@@ -185,7 +181,7 @@ public class HomeController {
 	            afficheWarning(e1.getMessage());
 	            return;
 	        }
-        }initFractal();
+        }initFractalParallel();
     }
 
     @FXML
@@ -238,7 +234,7 @@ public class HomeController {
 	            afficheWarning(e1.getMessage());
 	            return;
 	        }
-        }initFractal();
+        }initFractalParallel();
     }
 
     public void handleZoomArriere(ActionEvent actionEvent) {
@@ -271,7 +267,7 @@ public class HomeController {
 	            afficheWarning(e1.getMessage());
 	            return;
 	        }
-        }initFractal();
+        }initFractalParallel();
     }
 
     public Complexe getConstante() {
@@ -286,9 +282,17 @@ public class HomeController {
      * Cette methode est appelée lorsque l'on clique sur le bouton compute. Ce comportement est défini dans le fichier FXML
      */
     @FXML
-    private void handleComputeButtonClick() {
+    private void handleComputeButtonThreadsClick() {
         if (gatherFractalInfos()) {
-            initFractal();
+            initFractalThreads();
+        } else {
+            return;
+        }
+    }
+    @FXML
+    public void handleComputeButtonParallelClick() {
+        if (gatherFractalInfos()) {
+            initFractalParallel();
         } else {
             return;
         }
@@ -315,9 +319,9 @@ public class HomeController {
 
     @FXML
     private void UpdateDefaultValues() {
-        longueurTextField.setText("1001");
-        hauteurTextField.setText("1001");
+        System.out.println("default");
         iterMaxTextField.setText("1000");
+        sizeTextField.setText("1000");
         constanteBox.setValue(constantes.get(0).toString());
     }
 
@@ -393,7 +397,7 @@ public class HomeController {
         RadioButton selected = (RadioButton) typeFractale.getSelectedToggle();
         if (selected.getText().equals("Mandelbrot")) {
             try {
-                f = new Mandelbrot.Builder().constante(real, im).iterMax(iterMax).nbPointsLongueur(Integer.parseInt(longueurTextField.getText())).nbPointsHauteur(Integer.parseInt(hauteurTextField.getText())).pathFile(pathFile).buildMandelbrot();
+                f = new Mandelbrot.Builder().constante(real, im).iterMax(iterMax).nbPointsLongueur(Integer.parseInt(sizeTextField.getText())).nbPointsHauteur(Integer.parseInt(sizeTextField.getText())).pathFile(pathFile).buildMandelbrot();
             } catch (IllegalArgumentException e1) {
                 System.out.println("exception");
                 afficheWarning(e1.getMessage());
@@ -401,7 +405,7 @@ public class HomeController {
             }
         } else {
             try {
-                f = new Julia.Builder().constante(real, im).iterMax(iterMax).nbPointsLongueur(Integer.parseInt(longueurTextField.getText())).nbPointsHauteur(Integer.parseInt(hauteurTextField.getText())).pathFile(pathFile).buildJulia();
+                f = new Julia.Builder().constante(real, im).iterMax(iterMax).nbPointsLongueur(Integer.parseInt(sizeTextField.getText())).nbPointsHauteur(Integer.parseInt(sizeTextField.getText())).pathFile(pathFile).buildJulia();
             } catch (IllegalArgumentException e1) {
                 System.out.println("exception");
                 afficheWarning(e1.getMessage());
@@ -418,12 +422,12 @@ public class HomeController {
      * On peut après change de couleur en instantané avec les boutons
      * monoradioButton, defaultradioButton, et bwradioButton
      */
-    private void initFractal() {
+    private void initFractalThreads() {
         Calendar calendar = Calendar.getInstance();
         Date startDate = calendar.getTime();
         try {
             FractalRenderer.calcule(fractale,4);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return;
         }monoradioButton.setOnAction( event -> draw());
@@ -440,4 +444,29 @@ public class HomeController {
         long sumDate = endDate.getTime() - startDate.getTime();
         System.out.println("time :" + sumDate + " ms");
     }
+
+    private void initFractalParallel() {
+        Calendar calendar = Calendar.getInstance();
+        Date startDate = calendar.getTime();
+        try {
+            fractale.computeParallel();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+        monoradioButton.setOnAction( event -> draw());
+        defaultradioButton.setOnAction( e -> draw());
+        bwradioButton.setOnAction(e -> draw());
+
+        draw();
+        Calendar calendar2 = Calendar.getInstance();
+
+        Date endDate = calendar2.getTime();
+        long sumDate = endDate.getTime() - startDate.getTime();
+        System.out.println("time :" + sumDate + " ms");
+    }
+
+
+
+
 }

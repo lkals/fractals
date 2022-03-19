@@ -5,9 +5,9 @@ import java.util.function.BiFunction;
 
 public class Mandelbrot extends Julia {
 
-	protected Mandelbrot(Builder builder) {
-		super(builder);
-	}
+    Mandelbrot (int nbPointsLongueur, int nbPointsHauteur, double pas,int iterMax, Point a,Point b,Complexe cte) {
+        super(nbPointsLongueur,nbPointsHauteur,pas,iterMax,a,b,cte);
+    }
 	
 	@Override
 	public int indexDivergence(BiFunction<Complexe, Complexe, Complexe> fonction, Complexe zn) {

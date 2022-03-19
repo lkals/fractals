@@ -23,40 +23,40 @@
                             <font>
                                 <Font size="16.0" />
                             </font></Label>
-                        <Label layoutX="315.0" layoutY="36.0" prefHeight="17.0" prefWidth="132.0" text="Taille de la matrice" />
-                        <TextField fx:id="longueurTextField" layoutX="332.0" layoutY="61.0" prefHeight="34.0" prefWidth="94.0" promptText="longueur" />
-                        <Label layoutX="137.0" layoutY="35.0" prefHeight="18.0" prefWidth="166.0" text="Nombre d'itérations max" textAlignment="CENTER" />
-                        <TextField fx:id="iterMaxTextField" layoutX="168.0" layoutY="63.0" prefHeight="34.0" prefWidth="109.0" promptText="ITER_MAX" />
-                        <ButtonBar layoutX="641.0" layoutY="120.0" prefHeight="40.0" prefWidth="172.0" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="641.0" AnchorPane.rightAnchor="22.0">
+                        <Label layoutX="137.0" layoutY="48.0" prefHeight="18.0" prefWidth="166.0" text="Nombre d'itérations max" textAlignment="CENTER" />
+                        <TextField fx:id="iterMaxTextField" layoutX="137.0" layoutY="67.0" prefHeight="27.0" prefWidth="79.0" promptText="ITER_MAX" />
+                        <ButtonBar layoutX="111.0" layoutY="141.0" prefHeight="40.0" prefWidth="355.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="111.0" AnchorPane.rightAnchor="369.0">
                             <buttons>
-                                <Button fx:id="computeButton" mnemonicParsing="false" onAction="#handleComputeButtonClick" prefHeight="31.0" prefWidth="98.0" text="Compute" textFill="#0260fa">
+                                <Button fx:id="computeButtonThreads" minWidth="55.0" mnemonicParsing="false" onAction="#handleComputeButtonThreadsClick" prefHeight="30.0" prefWidth="95.0" text="4 threads" textFill="#0260fa">
                                     <font>
                                         <Font name="System Bold" size="14.0" />
                                     </font>
                                 </Button>
+                        <Label text="Computing options" />
+                        <Button fx:id="computeButtonParallel" mnemonicParsing="false" onAction="#handleComputeButtonParallelClick" text="Parallel Stream" />
                             </buttons></ButtonBar>
-                        <TextField fx:id="hauteurTextField" layoutX="332.0" layoutY="105.0" prefHeight="34.0" prefWidth="94.0" promptText="hauteur" />
-                        <Label layoutX="27.0" layoutY="47.0" prefHeight="17.0" prefWidth="109.0" text="Constante" />
+                        <Label layoutX="19.0" layoutY="48.0" prefHeight="17.0" prefWidth="109.0" text="Constante" />
                         <ChoiceBox fx:id="constanteBox" layoutX="19.0" layoutY="66.0" prefHeight="27.0" prefWidth="109.0" />
-                        <CheckBox fx:id="defaultCheckBox" layoutX="604.0" layoutY="160.0" mnemonicParsing="false" onAction="#UpdateDefaultValues" text="default" />
-                        <RadioButton fx:id="monoradioButton" layoutX="19.0" layoutY="155.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="132.0" text="monochrome" />
-                        <RadioButton fx:id="defaultradioButton" layoutX="143.0" layoutY="160.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="116.0" text="par défaut" />
-                        <RadioButton fx:id="bwradioButton" layoutX="249.0" layoutY="154.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="132.0" text="black &amp; white" />
-                        <ButtonBar layoutX="611.0" layoutY="95.0" prefHeight="40.0" prefWidth="202.0">
+                        <CheckBox fx:id="defaultCheckBox" layoutX="19.0" layoutY="152.0" mnemonicParsing="false" onAction="#UpdateDefaultValues" text="default" />
+                        <RadioButton fx:id="monoradioButton" layoutX="517.0" layoutY="139.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="132.0" text="monochrome" />
+                        <RadioButton fx:id="defaultradioButton" layoutX="517.0" layoutY="105.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="116.0" text="default" />
+                        <RadioButton fx:id="bwradioButton" layoutX="517.0" layoutY="66.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="132.0" text="black &amp; white" />
+                        <ButtonBar layoutX="639.0" layoutY="16.0" prefHeight="49.0" prefWidth="146.0">
                             <buttons>
-                                <Button fx:id="zoomAvantButton" mnemonicParsing="false" onAction="#handleZoomAvant" prefHeight="30.0" prefWidth="70.0" text="+" />
-                                <Button fx:id="zoomArriereButton" mnemonicParsing="false" onAction="#handleZoomArriere" prefHeight="32.0" text="-" />
+                                <Button fx:id="zoomAvantButton" mnemonicParsing="false" onAction="#handleZoomAvant" prefHeight="22.0" prefWidth="72.0" text="+" />
+                                <Button fx:id="zoomArriereButton" minWidth="69.0" mnemonicParsing="false" onAction="#handleZoomArriere" prefHeight="26.0" prefWidth="81.0" text="-" />
                             </buttons>
                         </ButtonBar>
-                        <Button fx:id="leftButton" layoutX="639.0" layoutY="31.0" minWidth="35.0" mnemonicParsing="false" onAction="#handleLeft" prefHeight="32.0" prefWidth="52.0" text="&lt;" />
-                        <Button fx:id="rightButton" layoutX="754.0" layoutY="31.0" minWidth="53.0" mnemonicParsing="false" onAction="#handleRight" prefHeight="32.0" prefWidth="54.0" text="&gt;" />
-                        <Button fx:id="upButton" layoutX="703.0" layoutY="4.0" mnemonicParsing="false" onAction="#handleUp" text="Up" />
-                        <Button fx:id="downButton" layoutX="695.0" layoutY="68.0" mnemonicParsing="false" onAction="#handleDown" text="Down" />
-                  <RadioButton fx:id="juliaRadioButton" layoutX="435.0" layoutY="135.0" mnemonicParsing="false" text="Julia" />
-                  <RadioButton fx:id="mandelRadioButton" layoutX="436.0" layoutY="163.0" mnemonicParsing="false" text="Mandelbrot" />
-                  <TextField fx:id="realTextField" layoutX="25.0" layoutY="110.0" prefHeight="34.0" prefWidth="85.0" promptText="réel" />
-                  <TextField fx:id="imTextField" layoutX="135.0" layoutY="110.0" prefHeight="34.0" prefWidth="85.0" promptText="imaginaire" />
-                  <Label layoutX="113.0" layoutY="119.0" prefHeight="17.0" prefWidth="42.0" text="+i" />
+                        <Button fx:id="leftButton" layoutX="641.0" layoutY="115.0" minWidth="34.0" mnemonicParsing="false" onAction="#handleLeft" prefHeight="27.0" prefWidth="55.0" text="&lt;" />
+                        <Button fx:id="rightButton" layoutX="751.0" layoutY="115.0" minWidth="34.0" mnemonicParsing="false" onAction="#handleRight" prefHeight="27.0" prefWidth="55.0" text="&gt;" />
+                        <Button fx:id="upButton" layoutX="696.0" layoutY="83.0" mnemonicParsing="false" onAction="#handleUp" prefHeight="27.0" prefWidth="55.0" text="Up" />
+                        <Button fx:id="downButton" layoutX="696.0" layoutY="147.0" mnemonicParsing="false" onAction="#handleDown" prefHeight="27.0" prefWidth="55.0" text="Down" />
+                  <RadioButton fx:id="juliaRadioButton" layoutX="393.0" layoutY="71.0" mnemonicParsing="false" text="Julia" />
+                  <RadioButton fx:id="mandelRadioButton" layoutX="393.0" layoutY="111.0" mnemonicParsing="false" text="Mandelbrot" />
+                  <TextField fx:id="realTextField" layoutX="19.0" layoutY="106.0" prefHeight="27.0" prefWidth="79.0" promptText="réel" />
+                  <TextField fx:id="imTextField" layoutX="137.0" layoutY="106.0" prefHeight="27.0" prefWidth="79.0" promptText="imaginaire" />
+                  <Label layoutX="107.0" layoutY="111.0" prefHeight="17.0" prefWidth="42.0" text="+i" />
+                  <TextField fx:id="sizeTextField" layoutX="277.0" layoutY="82.0" prefHeight="30.0" prefWidth="79.0" promptText="size" />
                     </children>
                 </AnchorPane>
             </items>

@@ -1,8 +1,11 @@
 package Modele;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.stream.IntStream;
 
 /**
  * classe abstraite Fractale
@@ -10,19 +13,76 @@ import java.util.function.BiFunction;
 
 public abstract class Fractale {
 
+    protected final int nbPointsHauteur;
+    protected final int nbPointsLongueur;
+    protected final double pas;
+    protected final int iterMax;
+    protected final Point a;
+    protected final Point b;
+    protected String pathFile;
+    protected final Complexe constante;
+    protected Pixel[][] indexes;
+    protected Map<Integer,List<Pixel>> pixels= new HashMap<>();
+
+    public Fractale(int nbPointsLongueur, int nbPointsHauteur, double pas,int iterMax, Point a,Point b,Complexe cte) {
+        this.nbPointsHauteur=nbPointsHauteur;
+        this.nbPointsLongueur=nbPointsLongueur;
+        this.pas=pas;
+        this.iterMax=iterMax;
+        this.a=a;
+        this.b=b;
+        constante=cte;
+        indexes = new Pixel[nbPointsHauteur][nbPointsLongueur];
+    }
+
+
+    /**
+     * Computes the divergence index of a number
+     * @param fonction, a function which returns a complex number
+     * @param zn a complex number
+     * @return
+     */
     public abstract int indexDivergence(BiFunction<Complexe, Complexe, Complexe> fonction, Complexe zn);
+
+    /**
+     * Computes the divergence indexes for a certain range
+     * @param id
+     * @param debut
+     * @param fin
+     */
     protected abstract void computeRectangle(int id,int debut, int fin);
-    public abstract Map<Integer, List<Pixel>> getPixels();
-    public abstract int getNbPointsHauteur();
-    public abstract int getNbPointsLongueur();
-    public abstract Pixel [][] getArrayPixels();
-    public abstract int getIterMax();
-    public abstract Point getA();
-    public abstract Point getB();
-    public abstract double getPas();
-	public abstract String getPathFile();
+
+    public abstract void computeParallel();
+
 	public abstract void downloadImage(int color);
-	public abstract void setPathfile(String string);
+
+    public static List<Complexe> getConstantes() {
+        List<Complexe> constantes = new ArrayList<>();
+        constantes.add(new Complexe(-0.7269,0.1889));
+        constantes.add(new Complexe(0.3,0.5));
+        constantes.add(new Complexe(0.285 , 0.01 ));
+        constantes.add(new Complexe(0.285 , 0.013 ));
+        constantes.add(new Complexe(-1.417022285618 , 0.0099534));
+        constantes.add(new Complexe(-0.038088 , 0.9754633 ));
+        constantes.add(new Complexe(-1.476,0));
+        constantes.add(new Complexe(-0.4 ,0.6 ));
+        constantes.add(new Complexe(-0.8 , 0.156 ));
+        return constantes;
+    }
+
+    public abstract int getNbPointsHauteur();
+
+   
+
+    public Pixel[][] getArrayPixels() {
+        return indexes;
+    }
+
+    public abstract Point getA();
+
+    public abstract Point getB();
+
+    public abstract double getPas();
 
     /**
      * classe static Builder
@@ -87,13 +147,13 @@ public abstract class Fractale {
         public Julia buildJulia() {
             if (Math.abs(b.getX() - a.getX()) == Math.abs(b.getY() - a.getY()) && nbPointsLongueur!=nbPointsHauteur) {
                 throw new IllegalArgumentException("On se place dans un carré complexe : hauteur=largeur!");
-            }return new Julia(this);
+            }return new Julia(nbPointsLongueur,nbPointsHauteur,pas,iterMax,a,b,constante);
         }
         
         public Mandelbrot buildMandelbrot() {
             if (Math.abs(b.getX() - a.getX()) == Math.abs(b.getY() - a.getY()) && nbPointsLongueur!=nbPointsHauteur) {
                 throw new IllegalArgumentException("On se place dans un carré complexe : hauteur=largeur!");
-            }return new Mandelbrot(this);
+            }return new Mandelbrot(nbPointsLongueur,nbPointsHauteur,pas,iterMax,a,b,constante);
         }
     }
 }
